@@ -852,7 +852,9 @@ int main(int argc, char* argv[])
         wLn("jucer_export_target_configuration(");
         wLn("  \"", exporterName, "\"");
         wLn("  NAME \"", configuration.getProperty("name").toString(), "\"");
-        wLn("  DEBUG_MODE ", (bool{configuration.getProperty("isDebug")} ? "ON" : "OFF"));
+
+        const auto isDebug = bool{configuration.getProperty("isDebug")};
+        wLn("  DEBUG_MODE ", (isDebug ? "ON" : "OFF"));
 
         convertSetting(configuration, "targetName", "BINARY_NAME", {});
         convertSetting(configuration, "binaryPath", "BINARY_LOCATION", {});
@@ -1124,6 +1126,13 @@ int main(int argc, char* argv[])
 
           convertOnOffSetting(configuration, "enableIncrementalLinking",
                               "INCREMENTAL_LINKING", {});
+
+          if (!isDebug)
+          {
+            convertOnOffSetting(configuration, "alwaysGenerateDebugSymbols",
+                                "FORCE_GENERATION_OF_DEBUG_SYMBOLS", {});
+          }
+
           convertSetting(configuration, "prebuildCommand", "PREBUILD_COMMAND", {});
           convertSetting(configuration, "postbuildCommand", "POSTBUILD_COMMAND", {});
           convertOnOffSetting(configuration, "generateManifest", "GENERATE_MANIFEST", {});
