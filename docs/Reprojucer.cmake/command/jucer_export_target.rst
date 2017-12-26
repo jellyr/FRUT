@@ -40,6 +40,7 @@ following tags:
 When ``<exporter>`` equals ``"Visual Studio 2017"``, ``"Visual Studio 2015"`` or
 ``"Visual Studio 2013"``, ``<setting_tag>`` can also be one of the following tags:
 
+- ``MANIFEST_FILE``
 - ``PLATFORM_TOOLSET``
 - ``USE_IPP_LIBRARY``
 - ``VST3_SDK_FOLDER``
