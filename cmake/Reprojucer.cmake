@@ -68,15 +68,7 @@ endfunction()
 
 function(jucer_project_settings)
 
-  if(NOT "PROJECT_NAME" IN_LIST ARGN)
-    message(FATAL_ERROR "Missing PROJECT_NAME argument")
-  endif()
-
-  if(NOT "PROJECT_TYPE" IN_LIST ARGN)
-    message(FATAL_ERROR "Missing PROJECT_TYPE argument")
-  endif()
-
-  set(project_setting_tags
+  set(single_value_keywords
     "PROJECT_NAME"
     "PROJECT_VERSION"
     "COMPANY_NAME"
@@ -94,86 +86,83 @@ function(jucer_project_settings)
     "PREPROCESSOR_DEFINITIONS"
     "HEADER_SEARCH_PATHS"
   )
+  set(multi_value_keywords
+  )
+  _FRUT_parse_arguments("" "${single_value_keywords}" "${multi_value_keywords}" ${ARGN})
 
+  if(NOT DEFINED _PROJECT_NAME)
+    message(FATAL_ERROR "Missing PROJECT_NAME argument")
+  endif()
+
+  if(DEFINED _PROJECT_VERSION)
+    string(REGEX MATCH ".+\\..+\\..+(\\..+)?" version_match "${_PROJECT_VERSION}")
+    if(NOT _PROJECT_VERSION STREQUAL version_match)
+      message(WARNING
+        "The PROJECT_VERSION doesn't seem to be in the format major.minor.point[.point]"
+      )
+    endif()
+    _FRUT_version_to_hex("${_PROJECT_VERSION}" hex_value)
+    set(JUCER_PROJECT_VERSION_AS_HEX "${hex_value}" PARENT_SCOPE)
+  endif()
+
+  if(NOT DEFINED _PROJECT_TYPE)
+    message(FATAL_ERROR "Missing PROJECT_TYPE argument")
+  endif()
   set(project_types "GUI Application" "Console Application" "Static Library"
     "Dynamic Library" "Audio Plug-in"
   )
+  if(NOT "${_PROJECT_TYPE}" IN_LIST project_types)
+    message(FATAL_ERROR "Unsupported project type: \"${_PROJECT_TYPE}\"\n"
+      "Supported project types: ${project_types}"
+    )
+  endif()
 
-  set(size_limit_descs "Default" "20.0 MB" "10.0 MB" "6.0 MB" "2.0 MB" "1.0 MB" "512.0 KB"
-    "256.0 KB" "128.0 KB" "64.0 KB"
-  )
-  set(size_limits 10240 20480 10240 6144 2048 1024 512 256 128 64)
+  if(DEFINED _BINARYDATACPP_SIZE_LIMIT)
+    set(size_limit_descs "Default" "20.0 MB" "10.0 MB" "6.0 MB" "2.0 MB" "1.0 MB"
+      "512.0 KB" "256.0 KB" "128.0 KB" "64.0 KB"
+    )
+    set(size_limits 10240 20480 10240 6144 2048 1024 512 256 128 64)
 
-  set(cxx_language_standard_descs "C++11" "C++14" "Use Latest")
-  set(cxx_language_standards "11" "14" "latest")
+    list(FIND size_limit_descs "${_BINARYDATACPP_SIZE_LIMIT}" size_limit_index)
+    if(size_limit_index EQUAL -1)
+      message(FATAL_ERROR "Unsupported value for BINARYDATACPP_SIZE_LIMIT: "
+        "\"${_BINARYDATACPP_SIZE_LIMIT}\"\nSupported values: ${size_limit_descs}"
+      )
+    endif()
+    list(GET size_limits ${size_limit_index} _BINARYDATACPP_SIZE_LIMIT)
+  endif()
 
-  unset(tag)
-  foreach(element ${ARGN})
-    if(NOT DEFINED tag)
-      set(tag ${element})
+  if(DEFINED _CXX_LANGUAGE_STANDARD)
+    set(cxx_lang_standard_descs "C++11" "C++14" "Use Latest")
+    set(cxx_lang_standards "11" "14" "latest")
 
-      if(NOT "${tag}" IN_LIST project_setting_tags)
-        message(FATAL_ERROR "Unsupported project setting: ${tag}\n"
-          "Supported project settings: ${project_setting_tags}"
-        )
-      endif()
-    else()
-      set(value ${element})
+    list(FIND cxx_lang_standard_descs "${_CXX_LANGUAGE_STANDARD}" cxx_lang_standard_index)
+    if(cxx_lang_standard_index EQUAL -1)
+      message(FATAL_ERROR "Unsupported value for CXX_LANGUAGE_STANDARD: "
+        "\"${_CXX_LANGUAGE_STANDARD}\"\nSupported values: ${cxx_lang_standard_descs}"
+      )
+    endif()
+    list(GET cxx_lang_standards ${cxx_lang_standard_index} _CXX_LANGUAGE_STANDARD)
+  endif()
 
-      if(tag STREQUAL "PROJECT_VERSION")
-        string(REGEX MATCH ".+\\..+\\..+(\\..+)?" version_match "${value}")
-        if(NOT value STREQUAL version_match)
-          message(WARNING
-            "The PROJECT_VERSION doesn't seem to be in the format "
-            "major.minor.point[.point]"
-          )
-        endif()
-        _FRUT_version_to_hex("${value}" hex_value)
-        set(JUCER_PROJECT_VERSION_AS_HEX "${hex_value}" PARENT_SCOPE)
+  if(DEFINED _PREPROCESSOR_DEFINITIONS)
+    string(REPLACE "\n" ";" _PREPROCESSOR_DEFINITIONS "${_PREPROCESSOR_DEFINITIONS}")
+  endif()
 
-      elseif(tag STREQUAL "PROJECT_TYPE")
-        if(NOT "${value}" IN_LIST project_types)
-          message(FATAL_ERROR "Unsupported project type: \"${value}\"\n"
-            "Supported project types: ${project_types}"
-          )
-        endif()
+  if(DEFINED _HEADER_SEARCH_PATHS)
+    string(REPLACE "\n" ";" _HEADER_SEARCH_PATHS "${_HEADER_SEARCH_PATHS}")
+    unset(header_search_paths)
+    foreach(path ${_HEADER_SEARCH_PATHS})
+      string(REPLACE "\\" "/" path "${path}")
+      _FRUT_abs_path_based_on_jucer_project_dir("${path}" path)
+      list(APPEND header_search_paths "${path}")
+    endforeach()
+    set(_HEADER_SEARCH_PATHS ${header_search_paths})
+  endif()
 
-      elseif(tag STREQUAL "BINARYDATACPP_SIZE_LIMIT")
-        list(FIND size_limit_descs "${value}" size_limit_index)
-        if(size_limit_index EQUAL -1)
-          message(FATAL_ERROR "Unsupported value for BINARYDATACPP_SIZE_LIMIT: "
-            "\"${value}\"\nSupported values: ${size_limit_descs}"
-          )
-        endif()
-        list(GET size_limits ${size_limit_index} value)
-
-      elseif(tag STREQUAL "CXX_LANGUAGE_STANDARD")
-        list(FIND cxx_language_standard_descs "${value}" cxx_language_standard_index)
-        if(cxx_language_standard_index EQUAL -1)
-          message(FATAL_ERROR "Unsupported value for CXX_LANGUAGE_STANDARD: "
-            "\"${value}\"\nSupported values: ${cxx_language_standard_descs}"
-          )
-        endif()
-        list(GET cxx_language_standards ${cxx_language_standard_index} value)
-
-      elseif(tag STREQUAL "PREPROCESSOR_DEFINITIONS")
-        string(REPLACE "\n" ";" value "${value}")
-
-      elseif(tag STREQUAL "HEADER_SEARCH_PATHS")
-        string(REPLACE "\\" "/" value "${value}")
-        string(REPLACE "\n" ";" value "${value}")
-        unset(header_search_paths)
-        foreach(path ${value})
-          _FRUT_abs_path_based_on_jucer_project_dir("${path}" path)
-          list(APPEND header_search_paths "${path}")
-        endforeach()
-        set(value ${header_search_paths})
-
-      endif()
-
-      set(JUCER_${tag} "${value}" PARENT_SCOPE)
-
-      unset(tag)
+  foreach(keyword ${single_value_keywords} ${multi_value_keywords})
+    if(DEFINED _${keyword})
+      set(JUCER_${keyword} ${_${keyword}} PARENT_SCOPE)
     endif()
   endforeach()
 
