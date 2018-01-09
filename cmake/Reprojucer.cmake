@@ -1695,6 +1695,50 @@ function(jucer_project_end)
 endfunction()
 
 
+function(_FRUT_parse_arguments prefix single_value_keywords multi_value_keywords)
+
+  foreach(keyword ${single_value_keywords} ${multi_value_keywords})
+    unset(${prefix}_${keyword})
+  endforeach()
+
+  set(inside_values FALSE)
+
+  foreach(current_arg ${ARGN})
+    list(FIND single_value_keywords "${current_arg}" single_value_index)
+    list(FIND multi_value_keywords "${current_arg}" multi_value_index)
+
+    if(single_value_index EQUAL -1 AND multi_value_index EQUAL -1)
+      if(inside_values)
+        if(inside_values STREQUAL "single")
+          set(${prefix}_${current_keyword} ${current_arg})
+          set(inside_values FALSE)
+        elseif(inside_values STREQUAL "multi")
+          list(APPEND ${prefix}_${current_keyword} ${current_arg})
+        endif()
+      else()
+        message(FATAL_ERROR "Unknown argument: \"${current_arg}\"")
+      endif()
+    else()
+      if(NOT single_value_index EQUAL -1)
+        set(current_keyword ${current_arg})
+        set(inside_values "single")
+      elseif(NOT multi_value_index EQUAL -1)
+        set(current_keyword ${current_arg})
+        set(inside_values "multi")
+      endif()
+    endif()
+  endforeach()
+
+  foreach(keyword ${single_value_keywords} ${multi_value_keywords})
+    unset(${prefix}_${keyword} PARENT_SCOPE)
+    if(DEFINED ${prefix}_${keyword})
+      set(${prefix}_${keyword} ${${prefix}_${keyword}} PARENT_SCOPE)
+    endif()
+  endforeach()
+
+endfunction()
+
+
 function(_FRUT_abs_path_based_on_jucer_project_dir in_path out_path)
 
   if(NOT IS_ABSOLUTE "${in_path}" AND NOT DEFINED JUCER_PROJECT_DIR)
