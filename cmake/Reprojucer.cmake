@@ -141,9 +141,8 @@ function(jucer_project_settings)
       elseif(tag STREQUAL "BINARYDATACPP_SIZE_LIMIT")
         list(FIND size_limit_descs "${value}" size_limit_index)
         if(size_limit_index EQUAL -1)
-          message(FATAL_ERROR
-            "Unsupported value for BINARYDATACPP_SIZE_LIMIT: \"${value}\"\n"
-            "Supported values: ${size_limit_descs}"
+          message(FATAL_ERROR "Unsupported value for BINARYDATACPP_SIZE_LIMIT: "
+            "\"${value}\"\nSupported values: ${size_limit_descs}"
           )
         endif()
         list(GET size_limits ${size_limit_index} value)
@@ -151,9 +150,8 @@ function(jucer_project_settings)
       elseif(tag STREQUAL "CXX_LANGUAGE_STANDARD")
         list(FIND cxx_language_standard_descs "${value}" cxx_language_standard_index)
         if(cxx_language_standard_index EQUAL -1)
-          message(FATAL_ERROR
-            "Unsupported value for CXX_LANGUAGE_STANDARD: \"${value}\"\n"
-            "Supported values: ${cxx_language_standard_descs}"
+          message(FATAL_ERROR "Unsupported value for CXX_LANGUAGE_STANDARD: "
+            "\"${value}\"\nSupported values: ${cxx_language_standard_descs}"
           )
         endif()
         list(GET cxx_language_standards ${cxx_language_standard_index} value)
