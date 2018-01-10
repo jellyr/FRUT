@@ -45,16 +45,13 @@ set(Reprojucer_supported_exporters_conditions
 
 function(jucer_project_begin)
 
-  cmake_parse_arguments("" "" "JUCER_VERSION;PROJECT_FILE;PROJECT_ID" "" ${ARGN})
-  if(NOT "${_UNPARSED_ARGUMENTS}" STREQUAL "")
-    message(FATAL_ERROR "Unknown arguments: ${_UNPARSED_ARGUMENTS}")
-  endif()
+  _FRUT_parse_arguments("" "JUCER_VERSION;PROJECT_FILE;PROJECT_ID" "" ${ARGN})
 
-  if(NOT "${_JUCER_VERSION}" STREQUAL "")
+  if(DEFINED _JUCER_VERSION)
     set(JUCER_VERSION "${_JUCER_VERSION}" PARENT_SCOPE)
   endif()
 
-  if(NOT "${_PROJECT_FILE}" STREQUAL "")
+  if(DEFINED _PROJECT_FILE)
     if(NOT EXISTS "${_PROJECT_FILE}")
       message(FATAL_ERROR "No such JUCE project file: ${_PROJECT_FILE}")
     endif()
@@ -62,7 +59,7 @@ function(jucer_project_begin)
     set(JUCER_PROJECT_DIR "${project_dir}" PARENT_SCOPE)
   endif()
 
-  if(NOT "${_PROJECT_ID}" STREQUAL "")
+  if(DEFINED _PROJECT_ID)
     set(JUCER_PROJECT_ID "${_PROJECT_ID}" PARENT_SCOPE)
   endif()
 
