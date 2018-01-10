@@ -83,10 +83,10 @@ function(jucer_project_settings)
     "BINARYDATACPP_SIZE_LIMIT"
     "BINARYDATA_NAMESPACE"
     "CXX_LANGUAGE_STANDARD"
-    "HEADER_SEARCH_PATHS"
   )
   set(multi_value_keywords
     "PREPROCESSOR_DEFINITIONS"
+    "HEADER_SEARCH_PATHS"
   )
   _FRUT_parse_arguments("" "${single_value_keywords}" "${multi_value_keywords}" ${ARGN})
 
@@ -146,7 +146,6 @@ function(jucer_project_settings)
   endif()
 
   if(DEFINED _HEADER_SEARCH_PATHS)
-    string(REPLACE "\n" ";" _HEADER_SEARCH_PATHS "${_HEADER_SEARCH_PATHS}")
     unset(header_search_paths)
     foreach(path ${_HEADER_SEARCH_PATHS})
       string(REPLACE "\\" "/" path "${path}")

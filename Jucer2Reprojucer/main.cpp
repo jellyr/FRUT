@@ -471,7 +471,9 @@ int main(int argc, char* argv[])
       jucerProject, "defines", "PREPROCESSOR_DEFINITIONS",
       [](const juce::var& v) { return split("\n", v.toString().toStdString()); });
 
-    convertSettingIfDefined(jucerProject, "headerPath", "HEADER_SEARCH_PATHS", {});
+    convertSettingAsListIfDefined(
+      jucerProject, "headerPath", "HEADER_SEARCH_PATHS",
+      [](const juce::var& v) { return split("\n", v.toString().toStdString()); });
 
     writeUserNotes(wLn, jucerProject);
 
