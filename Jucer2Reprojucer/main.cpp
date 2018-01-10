@@ -466,7 +466,11 @@ int main(int argc, char* argv[])
 
     convertSettingIfDefined(jucerProject, "binaryDataNamespace", "BINARYDATA_NAMESPACE",
                             {});
-    convertSettingIfDefined(jucerProject, "defines", "PREPROCESSOR_DEFINITIONS", {});
+
+    convertSettingAsListIfDefined(
+      jucerProject, "defines", "PREPROCESSOR_DEFINITIONS",
+      [](const juce::var& v) { return split("\n", v.toString().toStdString()); });
+
     convertSettingIfDefined(jucerProject, "headerPath", "HEADER_SEARCH_PATHS", {});
 
     writeUserNotes(wLn, jucerProject);

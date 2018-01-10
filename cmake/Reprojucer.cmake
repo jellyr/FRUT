@@ -83,10 +83,10 @@ function(jucer_project_settings)
     "BINARYDATACPP_SIZE_LIMIT"
     "BINARYDATA_NAMESPACE"
     "CXX_LANGUAGE_STANDARD"
-    "PREPROCESSOR_DEFINITIONS"
     "HEADER_SEARCH_PATHS"
   )
   set(multi_value_keywords
+    "PREPROCESSOR_DEFINITIONS"
   )
   _FRUT_parse_arguments("" "${single_value_keywords}" "${multi_value_keywords}" ${ARGN})
 
@@ -143,10 +143,6 @@ function(jucer_project_settings)
       )
     endif()
     list(GET cxx_lang_standards ${cxx_lang_standard_index} _CXX_LANGUAGE_STANDARD)
-  endif()
-
-  if(DEFINED _PREPROCESSOR_DEFINITIONS)
-    string(REPLACE "\n" ";" _PREPROCESSOR_DEFINITIONS "${_PREPROCESSOR_DEFINITIONS}")
   endif()
 
   if(DEFINED _HEADER_SEARCH_PATHS)
