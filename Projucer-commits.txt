@@ -1,0 +1,73 @@
+dffeeb9b619020dd11c671f1bc1747208fe0403a    Projucer: Added an --encode-binary command-line option
+0117aace012bb9c6f80c652f2ee5ed17ffcc9270    Added support for multi-target exporters and standalone plug-in format
+ec0485388d53d403e003d4a40e6e9897d36d94d2    Reworked and modernised Android exporter and removed old deprecated Android ant exporter
+871236d4cd2b6537097fe409fc6fcc230bb837ff    Removed MSVC 2005 and 2008 exporters
+1ed0051d74d7129b50a46fc660d3ec281029cf23    Fixed a potential crash in the new Android exporter
+f5231a9cc841972c66b82a4e5241868bc62f08cb    Changed the default MSVC architecture to x64
+? 04696f8082640a33cc7649d1f94f6690866092a9  Always build the AUv3 target with at least 10.11 SDK
+a2635253f288afdfc8826b7e92d53c3c6115e915    Added a tooltip to the Runtime Library selection in the Projucer
+cb6d43cbae1efc9dd8ff2496028e989a3476800b    Added preliminary support for static libraries on Android
+9c5f6dbe10866aca8fb2fc6e21c4bd9c8206d59d    Removed the "Update to recommended settings" warning for the latest version of Xcode
+51adfb8afd1651c5f10c45c6fa1bcfa0c360887f    Enabled multiple arguments for the Projucer whitespace cleaning commands
+? 12b9c01ad605368bad97f9af58d9cbdc1f865c65  Attempt to fix RTAS builds on Windows
+e2a37330826213c5bcde38831b636a0104d6aa6f    Added active configurations to the Visual Studio exporters
+f1bbead360f51dc0a7a00e145661c16e64141a6c    Set the default Visual Studio exporter settings to separate build products by architecture
+fb47a9068aebb5022492a812d048ac2151e6b114    Fixed a typo in the CMake file generator in the Android exporter
+934aa72d6fd99d8675e258e49bbcfb99ba00d60a    Fixed an issue where the Projucer would not detect OpenGL ESv3 support correctly on Android
+0b6131034bf81cd9859257efae4e4543ad086a2c    Modified Android exporter to use the jucer file's extra libraries in a more cmake way
+? c563d840da65d54c708b6a6b1950f80282180cdb  Fixed a bug when looking for a module header in an invalid module
+1739f3471784ad5824f14ee56e868a475fdf2bf0    Changed Projucer MainWindow templates to use default LookAndFeel background colour instead of always light grey
+2e0e9841454793312f29b27a049f0e31394a82ab    Add support for adding extra Android assets
+67b0e581875dfe8e4704b3f39d4ba0bdba49f7f4    Added code to ensure that assets are not copied when extra assets paths in Android are not specified
+e33abbc6feb3bfe3f701cf2b8ae9a3e1763d7d1a    Replaced Projucer-generated header guards with #pragma once and updated the examples
+? d933b4af84a319ccc5d3ab6e8ef862c71948895d  Fixed RTAS compilation on Windows and OS X
+c504875b3ff8eb6001337b753bce92c284bac7a5    Silenced a MSVC 2013 warning in the previous commit
+9147d986c9510bb14f4ba593c9faa079f67037db    Removed the C++98 build option from the Projucer
+0140304e38e023ad7a7d61d949f45182c8cc9ddd    Removed some #pragma once warnings from Projucer generated code
+b28555838dddeffb26c88245fdae633b2cfe1307    Added typeface and kerning support to the Projucer GUI editor
+0d660187a986d4176139176c426770356fe82e5d    Used Xcode folder references instead of groups for JUCE modules
+? ab4f269c605de74d70a1e46e472b0d35ebf89b1f  Removed brackets from build target names and resaved all projects
+302c42125c283a272acbbcc506fd33966666b903    Fixed dynamic library filenames in Makefiles
+? 69c07d357fe21fbbaab4458cb8cb2dc4ece76354  Changed Xcode C standard from c99 to c11
+? 2f5d4d65f7d1ae5752007e34a43040a6476b06b9  Fixed a bug setting JUCE_STANDALONE_APPLICATION
+? 4c59a920b43641b39cc5da06e234684bcc6f90d5  Added Inter-App Audio capabilities to standalone plug-ins
+a2ee6339e1a56a3b308873c4f975daa652da69cc    Restored JUCE modules as Xcode groups and resaved all projects
+? 24d02528e034641d1c48fe1ffe1a568d71aa3f72  Fixed an AAX bug where the Projucer's Xcode exporter would generate linker settings pointing to the wrong version of the AAXLibrary
+e59a81dd9c87bd236d6efe51d473bc6000fb9420    Cleaned up some code in recent commits in the Projucer's XCode exporter
+77820cfd0bbe14cc2744ffea43db39218477a4b6    Updated default android gradle plugin version to 2.3.0
+52fdb2bb3ff24811ee361a8df45bdc5c1c6eb13f    Updated default gradle version to 3.3 to match newest android plug-in version
+cc5e5bb43a6d0a31d7684ba04c058b430d4c7895    Made sure that whitespace clean-up tool can clean it's own code
+c64dc65be254e9e3d50fefd4f2b2f9786020506d    Whitespace clean-up
+bd217cf158d7e6054cb09a63c3a42666903cf7c4    Added trans Projucer command line option to generate translation files from the command line
+eb89d1ab31dc64fb295618be1a2f93dc83de300d    Added a new command line argument to create a finished translation file
+c26f9f3720d3a0a7629bc661ef8ec52abeec0fe7    Added Projucer option to select c++ language standard in Android exporter
+405b589f3f10c6ee3943135ade94ef10c0e85785    Fixed issue where return and newline characters were not being removed when using the —trans-finish command
+9c7ee8710a2dad06714a77e7cce58397f55a7803    Added support for VST3 SDK 3.6.7
+4fa73d7bb64c2d2470bf5d52ff4aa69eb515c7bf    Minor clean-ups in projucer translation code
+bba9c7e9ed48058d3b8bba4778c816dd8f69fb07    Added Visual Studio 2017 exporter to the Projucer
+? bcf743b33fd37854f7befa63f27490fec911d213    Removed whitespace characters from MSVC project names
+2ca5a9c32b2be5c1b9ed1e3f03f29e1aa8b8c6d8    Partially reverted fix for new VST3 SDK 3.6.7 by removing any dependency to VST2 SDK
+ca1b03a22d56ecb17314bf5317174b64e071c0ec    Minor style fixes
+96dcf649672c4b099089c9d40d4b36fd62100be8    Added Projucer support for C++ language standard in VS 2017
+? c993f46933b5c4974292847a8804669be16f7c61  Fixed platform-dependent default global Projucer preferences
+b3e5834a9197e57c7ccb73822f9dd34791f15015    Removed the VS2010 and VS2012 exporters
+8ed41ed14ba6e07605bbbb2ef6fe6abf3d61ace0    Fixed some whitespace style and cleaned up some code using C++11
+e253b8bea170cd017c277ba244c0b7b217d4d39e    Added some notes and an assertion to Component::grabKeyboardFocus(), to help people avoid a common mistake, which is trying to grab the focus of not-yet-visible components.
+44cd80969dce755d519ec3924e19df4a8b373721    A few C++11 modernisations and comment corrections
+aceb07770d23ababaa4aeb3d47e67d1fd2ed5dde    Updated Xcode compatibility to 8.3
+cbc0ed304b32b26ec1ada94c368f458c3d22ca5c    Fixed Xcode VST3PluginFormat compiler warnings
+> c25457835e84a4b0863a26d1d432af31585687db  Added manifest file property to the Projucer's MSVC exporter
+> 0b2257c53d2645f9ed15f666de96b957128814a2  Added Rez files to JuceLibraryCode so that they are compiled when not browsable
+8f6fa6f6c7a0c9bbf4123b03c654679dd84ff5a4    Changed the JUCE modules from groups to folder references in Xcode
+308f634f623fadc931b2e59691f4161a192366e6    Fixed a bug in the Projucer where the live-build's continuous recompilation state wasn't being changed when toggled on/off in the menu
+e2f38312b6eb5f293d196c8059c548f711090e45    Updated Projucer's default android plugin version to latest (2.3.1)
+dace37288bebb82cf83a05d8ad0e8f225ff8e0e1    Tidied up a couple of minor analyser warnings and comments
+837ac2143ceebb55fe6b9ba1b6a0cd68e9872220    Fixed iOS code sign entitlements bug
+dd7c510e2f9a47fa0d4a8a2d15113341656803c0    Added a Projucer warning when a project includes outdated Visual Studio exporters
+926652be8a71a6631696d3a7a7a1eb76d0ae345f    Added the -Wextra-semi warning to the projucer build
+bf94ab0e4c06f52fe5b9908b09db548f9117d25b    Made a few minor tweaks to reduce the number of pedantic -Wfloat-equals warnings
+ef2c63e4e324b75cdb7e13dc5ff5d519d8b146a8    Added a new LookAndFeel (V4) and re-skinned the JUCE Demo and examples. Improved the JUCE Demo on mobile devices.
+750ab85fe94db6b82e76c5e205e56c4c8d8c3896    Projucer UI overhaul and UX/workflow improvements. Support for new accounts and licensing model.
+7ed37f86001bc1a4a56c15249e61be32bf4ab928    Added the standard JUCE splash screen and app usage reporting
+b5afccc37c351caa95791568259b253d85628c7f    Updated file headers and the README with the JUCE 5 license
+1820b41e772d31b09132260cf65f4b466c0bd057    Made the proxy module include files start with "include_" to distinguish them from the files they're including
