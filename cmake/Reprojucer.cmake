@@ -1719,6 +1719,11 @@ function(_FRUT_parse_arguments prefix single_value_keywords multi_value_keywords
         message(FATAL_ERROR "Unknown argument: \"${current_arg}\"")
       endif()
     else()
+      if(inside_values AND NOT DEFINED ${prefix}_${current_keyword})
+        message(FATAL_ERROR
+          "Expected a value for ${current_keyword}, but got keyword ${current_arg}"
+        )
+      endif()
       if(NOT single_value_index EQUAL -1)
         set(current_keyword ${current_arg})
         set(inside_values "single")
@@ -1728,6 +1733,11 @@ function(_FRUT_parse_arguments prefix single_value_keywords multi_value_keywords
       endif()
     endif()
   endforeach()
+  if(inside_values AND NOT DEFINED ${prefix}_${current_keyword})
+    message(FATAL_ERROR
+      "Expected a value for ${current_keyword}, but reached end of arguments"
+    )
+  endif()
 
   foreach(keyword ${single_value_keywords} ${multi_value_keywords})
     unset(${prefix}_${keyword} PARENT_SCOPE)
