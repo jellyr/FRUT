@@ -123,6 +123,15 @@ std::vector<std::string> split(const std::string& sep, const std::string& value)
 }
 
 
+std::vector<std::string> filterEmpty(std::vector<std::string> input)
+{
+  std::vector<std::string> output;
+  std::copy_if(input.begin(), input.end(), std::back_inserter(output),
+               [](const std::string& s) { return !s.empty(); });
+  return output;
+}
+
+
 juce::ValueTree getChildWithPropertyRecursively(const juce::ValueTree& valueTree,
                                                 const juce::Identifier& propertyName,
                                                 const juce::var& propertyValue)
@@ -285,6 +294,40 @@ int main(int argc, char* argv[])
       if (valueTree.hasProperty(property))
       {
         convertOnOffSetting(valueTree, property, cmakeKeyword, std::move(converterFn));
+      }
+    };
+
+  const auto convertSettingAsList =
+    [&wLn](const juce::ValueTree& valueTree, const juce::Identifier& property,
+           const std::string& cmakeKeyword,
+           std::function<std::vector<std::string>(const juce::var&)> converterFn) {
+
+      const auto value = filterEmpty(converterFn(valueTree.getProperty(property)));
+
+      if (value.empty())
+      {
+        wLn("  # ", cmakeKeyword);
+      }
+      else
+      {
+        wLn("  ", cmakeKeyword);
+
+        for (const auto item : value)
+        {
+          wLn("    \"", escape("\\\";", item), "\"");
+        }
+      }
+    };
+
+  const auto convertSettingAsListIfDefined =
+    [&convertSettingAsList](
+      const juce::ValueTree& valueTree, const juce::Identifier& property,
+      const std::string& cmakeKeyword,
+      std::function<std::vector<std::string>(const juce::var&)> converterFn) {
+
+      if (valueTree.hasProperty(property))
+      {
+        convertSettingAsList(valueTree, property, cmakeKeyword, std::move(converterFn));
       }
     };
 
