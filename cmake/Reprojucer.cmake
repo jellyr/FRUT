@@ -45,25 +45,25 @@ set(Reprojucer_supported_exporters_conditions
 
 function(jucer_project_begin)
 
-  cmake_parse_arguments(arg "" "JUCER_VERSION;PROJECT_FILE;PROJECT_ID" "" ${ARGN})
-  if(NOT "${arg_UNPARSED_ARGUMENTS}" STREQUAL "")
-    message(FATAL_ERROR "Unknown arguments: ${arg_UNPARSED_ARGUMENTS}")
+  cmake_parse_arguments("" "" "JUCER_VERSION;PROJECT_FILE;PROJECT_ID" "" ${ARGN})
+  if(NOT "${_UNPARSED_ARGUMENTS}" STREQUAL "")
+    message(FATAL_ERROR "Unknown arguments: ${_UNPARSED_ARGUMENTS}")
   endif()
 
-  if(NOT "${arg_JUCER_VERSION}" STREQUAL "")
-    set(JUCER_VERSION "${arg_JUCER_VERSION}" PARENT_SCOPE)
+  if(NOT "${_JUCER_VERSION}" STREQUAL "")
+    set(JUCER_VERSION "${_JUCER_VERSION}" PARENT_SCOPE)
   endif()
 
-  if(NOT "${arg_PROJECT_FILE}" STREQUAL "")
-    if(NOT EXISTS "${arg_PROJECT_FILE}")
-      message(FATAL_ERROR "No such JUCE project file: ${arg_PROJECT_FILE}")
+  if(NOT "${_PROJECT_FILE}" STREQUAL "")
+    if(NOT EXISTS "${_PROJECT_FILE}")
+      message(FATAL_ERROR "No such JUCE project file: ${_PROJECT_FILE}")
     endif()
-    get_filename_component(project_dir "${arg_PROJECT_FILE}" DIRECTORY)
+    get_filename_component(project_dir "${_PROJECT_FILE}" DIRECTORY)
     set(JUCER_PROJECT_DIR "${project_dir}" PARENT_SCOPE)
   endif()
 
-  if(NOT "${arg_PROJECT_ID}" STREQUAL "")
-    set(JUCER_PROJECT_ID "${arg_PROJECT_ID}" PARENT_SCOPE)
+  if(NOT "${_PROJECT_ID}" STREQUAL "")
+    set(JUCER_PROJECT_ID "${_PROJECT_ID}" PARENT_SCOPE)
   endif()
 
 endfunction()
