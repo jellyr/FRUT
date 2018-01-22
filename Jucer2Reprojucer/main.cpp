@@ -132,6 +132,53 @@ std::vector<std::string> filterEmpty(std::vector<std::string> input)
 }
 
 
+std::vector<std::string> parsePreprocessorDefinitions(const std::string& input)
+{
+  return split("\n", input);
+  // std::vector<std::string> result;
+  // std::string::size_type start = 0u;
+
+
+  // while (start < text.length())
+  // {
+  //     String token, value;
+  //     s = s.findEndOfWhitespace();
+
+  //     while ((! s.isEmpty()) && *s != '=' && ! s.isWhitespace())
+  //         token << s.getAndAdvance();
+
+  //     s = s.findEndOfWhitespace();
+
+  //     if (*s == '=')
+  //     {
+  //         ++s;
+
+  //         while ((! s.isEmpty()) && *s == ' ')
+  //             ++s;
+
+  //         while ((! s.isEmpty()) && ! s.isWhitespace())
+  //         {
+  //             if (*s == ',')
+  //             {
+  //                 ++s;
+  //                 break;
+  //             }
+
+  //             if (*s == '\\' && (s[1] == ' ' || s[1] == ','))
+  //                 ++s;
+
+  //             value << s.getAndAdvance();
+  //         }
+  //     }
+
+  //     if (token.isNotEmpty())
+  //         result.set (token, value);
+  // }
+
+  // return result;
+}
+
+
 juce::ValueTree getChildWithPropertyRecursively(const juce::ValueTree& valueTree,
                                                 const juce::Identifier& propertyName,
                                                 const juce::var& propertyValue)
@@ -468,8 +515,9 @@ int main(int argc, char* argv[])
                             {});
 
     convertSettingAsListIfDefined(
-      jucerProject, "defines", "PREPROCESSOR_DEFINITIONS",
-      [](const juce::var& v) { return split("\n", v.toString().toStdString()); });
+      jucerProject, "defines", "PREPROCESSOR_DEFINITIONS", [](const juce::var& v) {
+        return parsePreprocessorDefinitions(v.toString().toStdString());
+      });
 
     convertSettingAsListIfDefined(
       jucerProject, "headerPath", "HEADER_SEARCH_PATHS",
